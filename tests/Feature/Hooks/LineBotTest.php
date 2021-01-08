@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Hooks;
 
 use Tests\TestCase;
 
 class LineBotTest extends TestCase
 {
-    public function test_example()
+    public function testOnEvent()
     {
         $response = $this->post('/line-bot');
 
