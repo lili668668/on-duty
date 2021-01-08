@@ -26,8 +26,8 @@ class LineBotController extends Controller
         $signature = base64_encode(hash_hmac('sha256', $body, $secret, true));
         $header = $request->header('X-Line-Signature');
         if ($signature === $header) {
-            $evnets = $request->input('evnets');
-            $this->service->router($evnets);
+            $events = $request->input('events');
+            $this->service->router($events);
         }
         return response('', 200);
     }

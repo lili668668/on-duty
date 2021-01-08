@@ -22,7 +22,7 @@ class LineBotService
         {
             switch ($value['type'])
             {
-                case "join":
+                case 'join':
                     return $this->join($value);
             }
         }
