@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Employee;
 use App\Repositories\EmployeeRepo;
 use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use InvalidArgumentException;
@@ -82,5 +83,16 @@ class EmployeeService
         {
             Employee::where('id', $entry['id'])->update(['duty_date' => Carbon::parse($entry['duty_date'])]);
         }
+    }
+
+    /**
+     * 
+     * @param Carbon $date 
+     * @return mixed 
+     * @throws InvalidFormatException 
+     */
+    public function queryOnDuty(Carbon $date)
+    {
+        return $this->repo->getEmployeesOnDuty($date);
     }
 }

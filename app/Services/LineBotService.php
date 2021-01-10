@@ -52,6 +52,24 @@ class LineBotService
         ]);
     }
 
+
+    /**
+     * 
+     * @param array $tags 
+     * @return string 
+     */
+    public function createNotificationMessage(array $tags)
+    {
+        $tags = array_map(function ($tag)
+        {
+            if (strpos($tag, '@') !== false) {
+                return $tag;
+            }
+            return '@'.$tag;
+        }, $tags);
+        return '本週值日生： '.implode(' ', $tags);
+    }
+
     /**
      * 
      * @param string $replyToken 
@@ -65,6 +83,23 @@ class LineBotService
         $token = env('LINE_BOT_CHANNEL_ACCESS_TOKEN', '');
         Http::withToken($token)->post('https://api.line.me/v2/bot/message/reply', [
             'replyToken' => $replyToken,
+            'messages' => $messages
+        ]);
+    }
+
+    /**
+     * 
+     * @param string $to 
+     * @param array $messages 
+     * @return void 
+     * @throws InvalidArgumentException 
+     * @throws Exception 
+     */
+    public function pushMessage(string $to, array $messages)
+    {
+        $token = env('LINE_BOT_CHANNEL_ACCESS_TOKEN', '');
+        Http::withToken($token)->post('https://api.line.me/v2/bot/message/push', [
+            'to' => $to,
             'messages' => $messages
         ]);
     }

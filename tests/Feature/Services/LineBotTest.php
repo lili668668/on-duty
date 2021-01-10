@@ -75,4 +75,32 @@ class LineBotTest extends TestCase
                 is_array($request['messages']);
         });
     }
+
+    public function testCreateNotificationMessage()
+    {
+        $service = new LineBotService();
+        $message = $service->createNotificationMessage(array('ballfish', '@botfish'));
+        $this->assertEquals('本週值日生： @ballfish @botfish', $message);
+    }
+
+    public function testPushMessage()
+    {
+        Http::fake();
+        $service = new LineBotService();
+        $service->pushMessage('test', [
+            [
+                "type" => "text",
+                "text" => "test"
+            ]
+        ]);
+        Http::assertSent(function (Request $request)
+        {
+            $token = env('LINE_BOT_CHANNEL_ACCESS_TOKEN', '');
+            return $request->hasHeader('Authorization', 'Bearer '.$token) &&
+                $request->url() === 'https://api.line.me/v2/bot/message/push' &&
+                $request->method() === 'POST' &&
+                $request['to'] === 'test' &&
+                is_array($request['messages']);
+        });
+    }
 }
